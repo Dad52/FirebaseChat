@@ -6,6 +6,9 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import com.ands.firebasechat.activities.CorrespActivity
+import com.ands.firebasechat.data.models.Messages
+import com.ands.firebasechat.data.models.Users
 import com.ands.firebasechat.databinding.ActivitySignInBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -14,6 +17,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 class SignInActivity : AppCompatActivity() {
@@ -43,7 +47,6 @@ class SignInActivity : AppCompatActivity() {
         binding.btnSignIn.setOnClickListener() {
             signInWithGoogle()
         }
-
         checkAuthState()
     }
 
@@ -75,9 +78,22 @@ class SignInActivity : AppCompatActivity() {
 
     private fun checkAuthState() {
         if (auth.currentUser != null) {
-            val i = Intent(this, MainActivity::class.java)
+            createNewUserInDatabase()
+            val i = Intent(this, CorrespActivity::class.java)
             startActivity(i)
         }
+    }
+
+    private fun createNewUserInDatabase() {
+        val database = Firebase.database
+        val usersReference = database.getReference("users")
+        usersReference.child(auth.currentUser?.uid ?: "error").setValue(Users(
+                uid = auth.currentUser?.uid,
+                name = auth.currentUser?.displayName,
+                photoUrl = auth.currentUser?.photoUrl.toString(),
+                email = auth.currentUser?.email,
+                phoneNumber = auth.currentUser?.phoneNumber
+        ))
     }
 
 }

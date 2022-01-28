@@ -1,23 +1,24 @@
-package com.ands.firebasechat
+package com.ands.firebasechat.data.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
+import com.ands.firebasechat.R
+import com.ands.firebasechat.data.models.Messages
 import com.ands.firebasechat.databinding.UserListItemBinding
 import com.ands.firebasechat.databinding.UserListRightItemBinding
 
-class UserAdapter(private val currentUserName: String): ListAdapter<User, SecondViewHolder>(ItemComparator()) {
+class UserAdapter(private val currentUserUid: String): ListAdapter<Messages, SecondViewHolder>(ItemComparator()) {
 
 
-    class ItemComparator: DiffUtil.ItemCallback<User>(){
-        override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
+    class ItemComparator: DiffUtil.ItemCallback<Messages>(){
+        override fun areItemsTheSame(oldItem: Messages, newItem: Messages): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
+        override fun areContentsTheSame(oldItem: Messages, newItem: Messages): Boolean {
             return oldItem == newItem
         }
 
@@ -52,8 +53,8 @@ class UserAdapter(private val currentUserName: String): ListAdapter<User, Second
     }
 
     override fun getItemViewType(position: Int): Int {
-        when (getItem(position).name) {
-            currentUserName -> return R.layout.user_list_right_item
+        when (getItem(position).userUid) {
+            currentUserUid -> return R.layout.user_list_right_item
             else -> return R.layout.user_list_item
         }
 
