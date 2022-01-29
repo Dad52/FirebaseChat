@@ -1,9 +1,11 @@
 package com.ands.firebasechat
 
 
+import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,6 +41,8 @@ class MainActivity : AppCompatActivity() {
 
         val friendUid = intent.extras?.get(CorrespActivity.USER_UID)
         val friendName = intent.extras?.get(CorrespActivity.USER_NAME).toString()
+        val friendPhotoUrl = intent.extras?.get(CorrespActivity.USER_PHOTO_URL).toString()
+                //передать целый класс и доставать из него данные
 
         val correspondenceReference = database.getReference("correspondence")
 
@@ -57,7 +61,7 @@ class MainActivity : AppCompatActivity() {
 
 
         onChangeListener(userMsgsReference)
-        setUpActionBar(friendName)
+        setUpActionBar(friendName, photoUrl = friendPhotoUrl)
         initRcView()
     }
 
@@ -77,11 +81,13 @@ class MainActivity : AppCompatActivity() {
                 binding.apply {
                     val list = ArrayList<Messages>()
                     for(s in snapshot.children) {
-                        val user = s.getValue(Messages::class.java)
-                        if (user != null) list.add(user)
+                        val record = s.getValue(Messages::class.java)
+
+                        if (record?.message != null) list.add(record)
 
                     }
                     list.reverse()
+                    Log.e("TAG", list.toString())
                     adapter.submitList(list)
                 }
             }
@@ -100,26 +106,15 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        return super.onCreateOptionsMenu(menu)
-    }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
+    private fun setUpActionBar(friendName: String, photoUrl: String) {
+
+        Picasso.with(binding.root.context).load(photoUrl).into(binding.userIconTitle)
+        binding.userNameTitle.text = friendName
+        binding.backBtnTitle.setOnClickListener() {
             finish()
         }
-        return super.onOptionsItemSelected(item)
-    }
 
-    private fun setUpActionBar(friendName: String) {
-        val actionBar = supportActionBar
-        Thread {
-            runOnUiThread {
-                actionBar?.setDisplayHomeAsUpEnabled(true)
-                actionBar?.title = friendName
-            }
-
-        }.start()
 
     }
 

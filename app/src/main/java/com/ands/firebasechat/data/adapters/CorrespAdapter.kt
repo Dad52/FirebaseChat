@@ -27,7 +27,7 @@ class CorrespAdapter(private val listener: ClickItem): ListAdapter<Corresps, Cor
 //                userIcon.setImageBitmap(bMap)
             Picasso.with(binding.root.context).load(corresps.photoUrl).into(userIcon)
             itemView.setOnClickListener() {
-                listener.onClickItem(corresps.userUid!!, corresps.userName!!)
+                listener.onClickItem(corresps.userUid!!, corresps.userName!!, corresps.photoUrl!!)
             }
 
         }
@@ -55,7 +55,7 @@ class CorrespAdapter(private val listener: ClickItem): ListAdapter<Corresps, Cor
     }
 
     interface ClickItem {
-        fun onClickItem(uid: String, name: String)
+        fun onClickItem(uid: String, name: String, photoUrl: String)
     }
 
 }

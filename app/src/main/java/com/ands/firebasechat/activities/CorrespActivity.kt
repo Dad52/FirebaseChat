@@ -95,10 +95,11 @@ class CorrespActivity : AppCompatActivity() {
 
     private fun initRcView() = with(binding) {
         adapter = CorrespAdapter(object: CorrespAdapter.ClickItem{
-            override fun onClickItem(uid: String, name: String) {
+            override fun onClickItem(uid: String, name: String, photoUrl: String) {
                 val i = Intent(this@CorrespActivity, MainActivity::class.java).apply {
                     putExtra(USER_UID, uid)
                     putExtra(USER_NAME, name)
+                    putExtra(USER_PHOTO_URL, photoUrl)
                 }
                 startActivity(i)
             }
@@ -157,6 +158,7 @@ class CorrespActivity : AppCompatActivity() {
     companion object {
         const val USER_UID = "user_uid"
         const val USER_NAME = "user_name"
+        const val USER_PHOTO_URL = "user_photo_url"
     }
 
 }
