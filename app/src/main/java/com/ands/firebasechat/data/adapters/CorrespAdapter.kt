@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ands.firebasechat.R
+import com.ands.firebasechat.data.GetCurrentTime
 import com.ands.firebasechat.data.models.Corresps
 import com.ands.firebasechat.databinding.CorrespondenceItemBinding
 import com.squareup.picasso.Picasso
@@ -23,10 +24,7 @@ class CorrespAdapter(private val listener: ClickItem): ListAdapter<Corresps, Cor
             userNameText.text = corresps.userName
             lastMessageText.text = corresps.lastMessage
 
-
-            val simpleDateFormat = SimpleDateFormat("h:mm a")
-            val dateString = simpleDateFormat.format(corresps.time?.toLong())
-            timeMsg.text = dateString.toString()
+            timeMsg.text = GetCurrentTime.getCurrentTimeString(corresps.time!!.toLong())
 
             Picasso.with(binding.root.context).load(corresps.photoUrl).into(userIcon)
             itemView.setOnClickListener() {

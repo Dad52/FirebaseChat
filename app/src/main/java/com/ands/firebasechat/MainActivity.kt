@@ -75,16 +75,8 @@ class MainActivity : AppCompatActivity() {
         ))
         val calendar = Calendar.getInstance()
         reference.child("chatInfo").child("lastMessage").setValue(binding.messageEditText.text.toString())
-        reference.child("chatInfo").child("time").setValue(calendar.timeInMillis.toString())
+        reference.child("chatInfo").child("time").setValue(GetCurrentTime.getCurrentDateInMillis())
 
-
-//        Toast.makeText(this, "${calendar.timeInMillis.toString()}", Toast.LENGTH_SHORT).show()
-//        Toast.makeText(this, "${calendar.timeInMillis.toString()}", Toast.LENGTH_SHORT).show()
-//
-//        val simpleDateFormat = SimpleDateFormat("dd/MM/yyyy")
-//        val simpleDateFormat2 = SimpleDateFormat("h:mm a")
-//        val dateString = simpleDateFormat.format(calendar.timeInMillis)
-//        Toast.makeText(this, dateString.toString(), Toast.LENGTH_SHORT).show()
     }
 
     private fun onChangeListener(myRef: DatabaseReference) {

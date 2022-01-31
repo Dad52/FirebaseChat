@@ -40,28 +40,9 @@ class CorrespActivity : AppCompatActivity() {
         val database = Firebase.database
 
         val defaultReference = database.getReference("correspondence").child(auth.currentUser!!.uid)
-        val usersReference = database.getReference("users")
-//        defaultReference.child("L1Wzmwrx61Tm2awOC2IEYOSJ53k1").setValue(Corresps(
-//            userName = "1312",
-//            "1312",
-//            "312312",
-//            "sdasdasdas"
-//        ))
-
-//        defaultReference.child("L1Wzmwrx61Tm2awOC2IEYOSJ53k1").child(defaultReference.push().key ?: "error").setValue(Messages("312312", "312312", "dasdasda"))
-//
-//
-//        defaultReference.child("L1Wzmwrx61Tm2awOC2IEYOSJ53k1").child("userName").setValue("31231231231231231231231231")
-//        defaultReference.child("L1Wzmwrx61Tm2awOC2IEYOSJ53k2").child("chatInfo").setValue(Corresps(
-//            userName = "Сергей Поляков",
-//            "1312",
-//            "Пока, я тебя не знаю?",
-//            "11:59"
-//        ))
-
 
         initRcView()
-        onChangeCorrespondence(defaultReference, usersReference)
+        onChangeCorrespondence(defaultReference)
 
     }
 
@@ -79,13 +60,13 @@ class CorrespActivity : AppCompatActivity() {
             val friendMsgsReference = friendReference.child(auth.currentUser?.uid.toString()).child("chatInfo")
 
             userMsgsReference.child("lastMessage").setValue("Напишите что-нибудь..")
-            userMsgsReference.child("time").setValue(GetCurrentTime.getCurrentTime())
+            userMsgsReference.child("time").setValue(GetCurrentTime.getCurrentDateInMillis())
             userMsgsReference.child("userName").setValue("Андрюша")
             userMsgsReference.child("userUid").setValue("CtX7DZXHpHNrAz1ITHe21XHkKBJ2")
             userMsgsReference.child("photoUrl").setValue("https://lh3.googleusercontent.com/a-/AOh14GhkJYr7dMpLuG1rTdf6HjmUvedPTaBlqbbnjEVVbQ=s96-c")
 
             friendMsgsReference.child("lastMessage").setValue("Напишите что-нибудь..")
-            friendMsgsReference.child("time").setValue(GetCurrentTime.getCurrentTime())
+            friendMsgsReference.child("time").setValue(GetCurrentTime.getCurrentDateInMillis())
             friendMsgsReference.child("userName").setValue(auth.currentUser?.displayName.toString())
             friendMsgsReference.child("userUid").setValue(auth.currentUser?.uid.toString())
             friendMsgsReference.child("photoUrl").setValue(auth.currentUser?.photoUrl.toString())
@@ -109,7 +90,7 @@ class CorrespActivity : AppCompatActivity() {
         correspsRcView.layoutManager = LinearLayoutManager(this@CorrespActivity)
     }
 
-    private fun onChangeCorrespondence(defaultReference: DatabaseReference, userReference: DatabaseReference) {
+    private fun onChangeCorrespondence(defaultReference: DatabaseReference) {
 
         defaultReference.orderByChild("chatInfo/time").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -117,6 +98,7 @@ class CorrespActivity : AppCompatActivity() {
                     Toast.makeText(this@CorrespActivity, "Добавляю Андрюшу...", Toast.LENGTH_SHORT).show()
                     getNewContact()
                 } else {
+
                     val list = ArrayList<Corresps>()
                     for (s in snapshot.children) {
 
@@ -124,19 +106,15 @@ class CorrespActivity : AppCompatActivity() {
                         list.add(newItem!!)
 
                     }
+
                     list.reverse()
                     adapter.submitList(list)
-
-
-
-//                    val correspsList = mutableListOf<Empty>()
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
 
             }
-
         })
     }
 
