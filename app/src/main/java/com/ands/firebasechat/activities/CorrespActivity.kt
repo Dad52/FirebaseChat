@@ -110,7 +110,8 @@ class CorrespActivity : AppCompatActivity() {
     }
 
     private fun onChangeCorrespondence(defaultReference: DatabaseReference, userReference: DatabaseReference) {
-        defaultReference.addValueEventListener(object : ValueEventListener {
+
+        defaultReference.orderByChild("chatInfo/time").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.childrenCount.toInt() == 0) {
                     Toast.makeText(this@CorrespActivity, "Добавляю Андрюшу...", Toast.LENGTH_SHORT).show()
@@ -119,14 +120,11 @@ class CorrespActivity : AppCompatActivity() {
                     val list = ArrayList<Corresps>()
                     for (s in snapshot.children) {
 
-
-
                         val newItem = snapshot.child(s.key.toString()).child("chatInfo").getValue(Corresps::class.java)
                         list.add(newItem!!)
-                        Log.e("Tag", s.key.toString())
-                        Log.e("Tag", s.toString())
 
                     }
+                    list.reverse()
                     adapter.submitList(list)
 
 

@@ -13,6 +13,7 @@ import com.ands.firebasechat.R
 import com.ands.firebasechat.data.models.Corresps
 import com.ands.firebasechat.databinding.CorrespondenceItemBinding
 import com.squareup.picasso.Picasso
+import java.text.SimpleDateFormat
 
 class CorrespAdapter(private val listener: ClickItem): ListAdapter<Corresps, CorrespAdapter.ItemHolder>(ItemComparator()) {
 
@@ -21,10 +22,12 @@ class CorrespAdapter(private val listener: ClickItem): ListAdapter<Corresps, Cor
         fun bind(corresps: Corresps, listener: ClickItem) = with(binding) {
             userNameText.text = corresps.userName
             lastMessageText.text = corresps.lastMessage
-            timeMsg.text = corresps.time
 
-//                val bMap = Picasso.get().load(corresps.photoUrl).get()
-//                userIcon.setImageBitmap(bMap)
+
+            val simpleDateFormat = SimpleDateFormat("h:mm a")
+            val dateString = simpleDateFormat.format(corresps.time?.toLong())
+            timeMsg.text = dateString.toString()
+
             Picasso.with(binding.root.context).load(corresps.photoUrl).into(userIcon)
             itemView.setOnClickListener() {
                 listener.onClickItem(corresps.userUid!!, corresps.userName!!, corresps.photoUrl!!)

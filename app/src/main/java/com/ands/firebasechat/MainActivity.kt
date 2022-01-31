@@ -24,6 +24,8 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
@@ -71,8 +73,18 @@ class MainActivity : AppCompatActivity() {
             auth.currentUser?.uid.toString(),
             binding.messageEditText.text.toString()
         ))
+        val calendar = Calendar.getInstance()
         reference.child("chatInfo").child("lastMessage").setValue(binding.messageEditText.text.toString())
-        reference.child("chatInfo").child("time").setValue(GetCurrentTime.getCurrentTime())
+        reference.child("chatInfo").child("time").setValue(calendar.timeInMillis.toString())
+
+
+//        Toast.makeText(this, "${calendar.timeInMillis.toString()}", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this, "${calendar.timeInMillis.toString()}", Toast.LENGTH_SHORT).show()
+//
+//        val simpleDateFormat = SimpleDateFormat("dd/MM/yyyy")
+//        val simpleDateFormat2 = SimpleDateFormat("h:mm a")
+//        val dateString = simpleDateFormat.format(calendar.timeInMillis)
+//        Toast.makeText(this, dateString.toString(), Toast.LENGTH_SHORT).show()
     }
 
     private fun onChangeListener(myRef: DatabaseReference) {
