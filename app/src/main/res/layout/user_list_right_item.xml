@@ -14,12 +14,15 @@
         android:layout_marginStart="128dp"
         android:background="@drawable/rounded_corner"
         android:gravity="left"
-        android:padding="6dp"
-        android:paddingStart="12dp"
-        android:text="TextView"
         android:maxLength="400"
-        android:textColor="#000000"
 
+        android:paddingStart="12dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="16dp"
+        android:text="Привет, как дела, то делаешь сегодня вечером?Хахахахаха, смешно"
+
+        android:textColor="#000000"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -31,11 +34,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="right"
-        android:text="TextView"
+        android:text="Sobolev Andrey"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/messageText"
         app:layout_constraintTop_toBottomOf="@+id/messageText"
         app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/messageTimeRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="4dp"
+        android:text="12:23"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/messageText"
+        app:layout_constraintEnd_toEndOf="@+id/messageText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

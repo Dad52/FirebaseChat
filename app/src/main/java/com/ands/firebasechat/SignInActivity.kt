@@ -6,8 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import com.ands.firebasechat.activities.CorrespActivity
-import com.ands.firebasechat.data.models.Messages
+import com.ands.firebasechat.activities.ChatsActivity
 import com.ands.firebasechat.data.models.Users
 import com.ands.firebasechat.databinding.ActivitySignInBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -31,7 +30,7 @@ class SignInActivity : AppCompatActivity() {
         binding = ActivitySignInBinding.inflate(layoutInflater).also { setContentView(it.root) }
 
         auth = Firebase.auth
-//        auth.currentUser
+
         launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
             val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
             try {
@@ -79,7 +78,7 @@ class SignInActivity : AppCompatActivity() {
     private fun checkAuthState() {
         if (auth.currentUser != null) {
             createNewUserInDatabase()
-            val i = Intent(this, CorrespActivity::class.java)
+            val i = Intent(this, ChatsActivity::class.java)
             startActivity(i)
         }
     }

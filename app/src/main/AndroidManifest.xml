@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FirebaseChat">
         <activity android:name=".activities.AddNewCorrespActivity"></activity>
-        <activity android:name=".activities.CorrespActivity" />
+        <activity android:name=".activities.ChatsActivity" />
         <activity android:name=".SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

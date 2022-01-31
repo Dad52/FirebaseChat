@@ -2,7 +2,6 @@ package com.ands.firebasechat.data.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.ands.firebasechat.R
@@ -10,7 +9,7 @@ import com.ands.firebasechat.data.models.Messages
 import com.ands.firebasechat.databinding.UserListItemBinding
 import com.ands.firebasechat.databinding.UserListRightItemBinding
 
-class UserAdapter(private val currentUserUid: String): ListAdapter<Messages, SecondViewHolder>(ItemComparator()) {
+class MessagesAdapter(private val currentUserUid: String, private val longClickListener: SecondViewHolder.LongClickMessages): ListAdapter<Messages, SecondViewHolder>(ItemComparator()) {
 
 
     class ItemComparator: DiffUtil.ItemCallback<Messages>(){
@@ -31,14 +30,14 @@ class UserAdapter(private val currentUserUid: String): ListAdapter<Messages, Sec
                             LayoutInflater.from(parent.context),
                             parent,
                             false
-                    )
+                    ), longClickListener
             )
             R.layout.user_list_item -> SecondViewHolder.LeftViewHolder(
                     UserListItemBinding.inflate(
                             LayoutInflater.from(parent.context),
                             parent,
                             false
-                    )
+                    ), longClickListener
             )
             else -> throw IllegalArgumentException("Invalid ViewType Provided")
         }

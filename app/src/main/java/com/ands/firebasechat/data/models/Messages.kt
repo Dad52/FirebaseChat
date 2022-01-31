@@ -1,10 +1,11 @@
 package com.ands.firebasechat.data.models
 
-import android.graphics.Bitmap
+import java.io.Serializable
 
 data class Messages(
-        val user: String? = null,//user: Users???
+        val user: String? = null,
         val userUid: String? = null,
         val message: String? = null,
-//        val userIcon: Bitmap? = null
-)
+        val time: String? = null,
+        var messageId: String? = null
+): Serializable
