@@ -106,29 +106,7 @@ class ChatsActivity : AppCompatActivity() {
         }
     }
 
-    private fun addIrisha() {
-        val database = Firebase.database
 
-        database.getReference("chatsInfo")
-                .child(auth.currentUser?.uid.toString())
-                .child("68M5uBeYarcxzcgan9CnSaypfMb2")
-                .setValue(ChatInfo(
-                        "Dad51channel - второй акк",
-                        "Проверка, тестики",
-                        "1643647714218",
-                        auth.currentUser?.uid.toString()
-                ))
-        database.getReference("chatsInfo")
-                .child("68M5uBeYarcxzcgan9CnSaypfMb2")
-                .child(auth.currentUser?.uid.toString())
-                .setValue(ChatInfo(
-                        "Основной акк",
-                        "Проверка, тестики",
-                        "1643647714218",
-                        auth.currentUser?.uid.toString()
-                ))
-
-    }
 
     private fun initRcView() = with(binding) {
         adapter = ChatsAdapter(object: ChatsAdapter.ClickItem{

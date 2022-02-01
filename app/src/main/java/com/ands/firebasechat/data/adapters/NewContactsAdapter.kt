@@ -10,16 +10,21 @@ import com.ands.firebasechat.data.models.Users
 import com.ands.firebasechat.databinding.NewContactItemBinding
 import com.squareup.picasso.Picasso
 
-class NewContactsAdapter: ListAdapter<Users, NewContactsAdapter.ItemHolder>(ItemComparator()) {
+class NewContactsAdapter(private val addNewContactListener: AddNewContactListener): ListAdapter<Users, NewContactsAdapter.ItemHolder>(ItemComparator()) {
 
     class ItemHolder(private val binding: NewContactItemBinding): RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(contact: Users) = with(binding) {
+        fun bind(contact: Users, addContactListener: AddNewContactListener) = with(binding) {
 
             contactEmailText.text = contact.email
             contactNameText.text = contact.name
 
             Picasso.with(binding.root.context).load(contact.photoUrl).into(contactIcon)
+
+            itemView.setOnClickListener() {
+                addContactListener.addNewContact(contact)
+            }
+
         }
 
     }
@@ -41,7 +46,11 @@ class NewContactsAdapter: ListAdapter<Users, NewContactsAdapter.ItemHolder>(Item
     }
 
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), addNewContactListener)
+    }
+
+    interface AddNewContactListener {
+        fun addNewContact(user: Users)
     }
 
 }

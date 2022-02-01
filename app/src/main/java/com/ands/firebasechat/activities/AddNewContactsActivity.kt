@@ -7,7 +7,9 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ands.firebasechat.R
+import com.ands.firebasechat.data.GetCurrentTime
 import com.ands.firebasechat.data.adapters.NewContactsAdapter
+import com.ands.firebasechat.data.models.ChatInfo
 import com.ands.firebasechat.data.models.Users
 import com.ands.firebasechat.databinding.ActivityAddNewCorrespBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -19,7 +21,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-class AddNewContactsActivity : AppCompatActivity() {
+class AddNewContactsActivity : AppCompatActivity(), NewContactsAdapter.AddNewContactListener {
 
     private lateinit var binding: ActivityAddNewCorrespBinding
     lateinit var auth: FirebaseAuth
@@ -62,7 +64,7 @@ class AddNewContactsActivity : AppCompatActivity() {
     }
 
     private fun initRcView() {
-        adapter = NewContactsAdapter()
+        adapter = NewContactsAdapter(this)
         binding.rcNewUsers.adapter = adapter
         binding.rcNewUsers.layoutManager = LinearLayoutManager(this)
     }
@@ -78,6 +80,33 @@ class AddNewContactsActivity : AppCompatActivity() {
             android.R.id.home -> finish()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun addNewContact(user: Users) {
+
+        //сделать проверка на то, общался ли человек ранее с ним или просто убирать таких из списка
+
+            val database = Firebase.database
+
+            database.getReference("chatsInfo")
+                    .child(auth.currentUser?.uid.toString())
+                    .child(user.uid.toString())
+                    .setValue(ChatInfo(
+                            user.name.toString(),
+                            "*Сообщений нет*",
+                            GetCurrentTime.getCurrentDateInMillis(),
+                            auth.currentUser?.uid.toString()
+                    ))
+            database.getReference("chatsInfo")
+                    .child(user.uid.toString())
+                    .child(auth.currentUser?.uid.toString())
+                    .setValue(ChatInfo(
+                            auth.currentUser?.displayName.toString(),
+                            "*Сообщений нет*",
+                            GetCurrentTime.getCurrentDateInMillis(),
+                            auth.currentUser?.uid.toString()
+                    ))
+    finish()
     }
 
 }
