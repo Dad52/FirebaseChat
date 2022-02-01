@@ -35,13 +35,14 @@ class AddNewContactsActivity : AppCompatActivity(), NewContactsAdapter.AddNewCon
         auth = Firebase.auth
 
         val newContactsReference = database.getReference("users")
+        val chatsInfoReference = database.getReference("chatsInfo").child(auth.currentUser?.uid.toString())
 
         initRcView()
-        onChangeNewContacts(newContactsReference)
+        onChangeNewContacts(newContactsReference, getAllUsersChats(chatsInfoReference))
 
     }
 
-    private fun onChangeNewContacts(contactsReference: DatabaseReference) {
+    private fun onChangeNewContacts(contactsReference: DatabaseReference, allUsersChats: ArrayList<String>) {
 
         contactsReference.addValueEventListener(object : ValueEventListener {
 
@@ -50,7 +51,8 @@ class AddNewContactsActivity : AppCompatActivity(), NewContactsAdapter.AddNewCon
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (contacts in snapshot.children) {
                     val contact = contacts.getValue(Users::class.java)
-                    if (contact != null && contact.uid != auth.currentUser?.uid) {
+
+                    if (contact != null && contact.uid != auth.currentUser?.uid && contact.uid !in allUsersChats) {
                         list.add(contact)
                     }
                 }
@@ -61,6 +63,28 @@ class AddNewContactsActivity : AppCompatActivity(), NewContactsAdapter.AddNewCon
                 Toast.makeText(this@AddNewContactsActivity, "Список не найден, попробуйте позже", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    //реализовать с чатами также как тут
+    private fun getAllUsersChats(chatsInfoReference: DatabaseReference): ArrayList<String> {
+
+        val chatsList = ArrayList<String>()
+
+        chatsInfoReference.addValueEventListener(object: ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (chats in snapshot.children) {
+                    val chat = chats.getValue(ChatInfo::class.java)
+                    if (chat != null) {
+                        chatsList.add(chats.key.toString())
+                    }
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+        })
+        return chatsList
     }
 
     private fun initRcView() {
