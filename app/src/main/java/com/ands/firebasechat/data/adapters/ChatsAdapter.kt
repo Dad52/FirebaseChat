@@ -26,9 +26,6 @@ class ChatsAdapter(private val listener: ClickItem, private val currentUserUid: 
             } else {
                 lastMessageText.text = chatInfo.lastMessage
             }
-//я могу вносить название(ключ) последнего сообщение в инфу о чате, потом его искать в списке сообщений по названию и брать оттуда инфу, время, uid, user'a
-//            lastMessageText.text = "ds" + chatInfo.lastMessage
-
 
             timeMsg.text = GetCurrentTime.getCurrentTimeString(chatInfo.lastMessageTime!!.toLong())
 

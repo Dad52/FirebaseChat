@@ -40,7 +40,8 @@ class ChatsActivity : AppCompatActivity() {
         val defaultReference = database.getReference("chatsInfo").child(auth.currentUser!!.uid)
 
         binding.addNewCorresp.setOnClickListener() {
-            addIrisha()
+            val intent = Intent(this, AddNewContactsActivity::class.java)
+            startActivity(intent)
         }
 
         initRcView()
@@ -145,7 +146,7 @@ class ChatsActivity : AppCompatActivity() {
 
     private fun onChangeCorrespondence(defaultReference: DatabaseReference) {
 
-        defaultReference.orderByChild("lastMessageTime").addValueEventListener(object : ValueEventListener {
+        defaultReference.orderByChild("/lastMessageTime").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshotChats: DataSnapshot) {
                 if (snapshotChats.childrenCount.toInt() == 0) {
                     Toast.makeText(this@ChatsActivity, "Добавляю Андрюшу...", Toast.LENGTH_SHORT).show()
@@ -171,16 +172,14 @@ class ChatsActivity : AppCompatActivity() {
                                         list.add(newChat!!)
                                     }
                                 }
-                                list.reverse()
-                                adapter.submitList(list)
+
+                                adapter.submitList(list.reversed())
                             }
 
                             override fun onCancelled(errorUser: DatabaseError) {
                                 Toast.makeText(this@ChatsActivity, "Error", Toast.LENGTH_SHORT).show()
                             }
                         })
-
-
                     }
                 }
             }
