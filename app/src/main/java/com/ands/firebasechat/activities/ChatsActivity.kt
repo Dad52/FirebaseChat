@@ -1,20 +1,21 @@
 package com.ands.firebasechat.activities
 
 import android.content.Intent
+import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ands.firebasechat.MainActivity
 import com.ands.firebasechat.R
-import com.ands.firebasechat.data.GetCurrentTime
 import com.ands.firebasechat.data.adapters.ChatsAdapter
 import com.ands.firebasechat.data.models.ChatInfo
 import com.ands.firebasechat.data.models.Users
-import com.ands.firebasechat.databinding.ActivityCorrespBinding
+import com.ands.firebasechat.databinding.ActivityChatsBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -25,13 +26,13 @@ import com.google.firebase.ktx.Firebase
 
 class ChatsActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityCorrespBinding
+    private lateinit var binding: ActivityChatsBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var adapter: ChatsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityCorrespBinding.inflate(layoutInflater).also { setContentView(it.root) }
+        binding = ActivityChatsBinding.inflate(layoutInflater).also { setContentView(it.root) }
 
         auth = Firebase.auth
 
@@ -49,65 +50,6 @@ class ChatsActivity : AppCompatActivity() {
 
     }
 
-    private fun restoreAllData() {
-        val database = Firebase.database
-
-        val chatsInfoRef = database.getReference("chatsInfo").child(auth.currentUser!!.uid)
-
-        database.getReference("users").addValueEventListener(object: ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for (s in snapshot.children) {
-
-                    if (s.key.toString() != auth.currentUser!!.uid) {
-
-                        val friendBranch = chatsInfoRef.child(s.key.toString())
-                        val chatsInfo = s.getValue(ChatInfo::class.java)
-//                        friendBranch.child("userUid").setValue(users?.uid.toString())
-//                        friendBranch.setValue(chatsInfo)
-//                        Log.e("Tag", users?.photoUrl.toString())
-
-                    }
-
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-
-            }
-
-        })
-    }
-
-    private fun getNewContact() {
-        if (auth.currentUser?.uid.toString() != "CtX7DZXHpHNrAz1ITHe21XHkKBJ2") {
-
-            val database = Firebase.database
-
-            val correspondenceReference = database.getReference("correspondence")
-
-            val userFriendReference = correspondenceReference.child(auth.currentUser?.uid.toString())
-            val userMsgsReference = userFriendReference.child("CtX7DZXHpHNrAz1ITHe21XHkKBJ2").child("chatInfo")
-
-            val friendReference = correspondenceReference.child("CtX7DZXHpHNrAz1ITHe21XHkKBJ2")
-            val friendMsgsReference = friendReference.child(auth.currentUser?.uid.toString()).child("chatInfo")
-
-            userMsgsReference.child("lastMessage").setValue("Напишите что-нибудь..")
-            userMsgsReference.child("time").setValue(GetCurrentTime.getCurrentDateInMillis())
-            userMsgsReference.child("userName").setValue("Андрюша")
-            userMsgsReference.child("userUid").setValue("CtX7DZXHpHNrAz1ITHe21XHkKBJ2")
-            userMsgsReference.child("photoUrl").setValue("https://lh3.googleusercontent.com/a-/AOh14GhkJYr7dMpLuG1rTdf6HjmUvedPTaBlqbbnjEVVbQ=s96-c")
-
-            friendMsgsReference.child("lastMessage").setValue("Напишите что-нибудь..")
-            friendMsgsReference.child("time").setValue(GetCurrentTime.getCurrentDateInMillis())
-            friendMsgsReference.child("userName").setValue(auth.currentUser?.displayName.toString())
-            friendMsgsReference.child("userUid").setValue(auth.currentUser?.uid.toString())
-            friendMsgsReference.child("photoUrl").setValue(auth.currentUser?.photoUrl.toString())
-
-        }
-    }
-
-
-
     private fun initRcView() = with(binding) {
         adapter = ChatsAdapter(object: ChatsAdapter.ClickItem{
             override fun onClickItem(chatInfo: ChatInfo) {
@@ -124,20 +66,20 @@ class ChatsActivity : AppCompatActivity() {
 
     private fun onChangeCorrespondence(defaultReference: DatabaseReference) {
 
+        val database = Firebase.database
+        val reference = database.getReference("users")
+
         defaultReference.orderByChild("/lastMessageTime").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshotChats: DataSnapshot) {
+
                 if (snapshotChats.childrenCount.toInt() == 0) {
-                    Toast.makeText(this@ChatsActivity, "Добавляю Андрюшу...", Toast.LENGTH_SHORT).show()
-//                    getNewContact()
+                    showHide(binding.noChatsText, true)
                 } else {
 
+                    showHide(binding.noChatsText, false)
                     val list = ArrayList<ChatInfo>()
 
                     for (s in snapshotChats.children) {
-
-                        val database = Firebase.database
-                        val reference = database.getReference("users")
-
 
                         reference.addValueEventListener(object : ValueEventListener {
                             override fun onDataChange(snapshotUser: DataSnapshot) {
@@ -150,7 +92,6 @@ class ChatsActivity : AppCompatActivity() {
                                         list.add(newChat!!)
                                     }
                                 }
-
                                 adapter.submitList(list.reversed())
                             }
 
@@ -163,11 +104,20 @@ class ChatsActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-
+                Toast.makeText(this@ChatsActivity, "Error", Toast.LENGTH_SHORT).show()
             }
 
         })
     }
+
+    private fun showHide(view: View, visibility: Boolean) {
+        view.visibility = if (visibility) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+    }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.signOutMenu) {

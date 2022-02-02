@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.ands.firebasechat.R
 
 import com.ands.firebasechat.data.GetCurrentTime
 import com.ands.firebasechat.data.models.ChatInfo
@@ -22,7 +23,7 @@ class ChatsAdapter(private val listener: ClickItem, private val currentUserUid: 
 
             userNameText.text = chatInfo.displayName
             if (currentUserUid == chatInfo.lastMessageUid.toString()) {
-                lastMessageText.text = "You: " + chatInfo.lastMessage
+                lastMessageText.text = binding.root.context.getString(R.string.YouText, chatInfo.lastMessage)
             } else {
                 lastMessageText.text = chatInfo.lastMessage
             }
