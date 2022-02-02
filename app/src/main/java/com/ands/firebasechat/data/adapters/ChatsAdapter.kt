@@ -1,23 +1,20 @@
 package com.ands.firebasechat.data.adapters
 
 
-
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ands.firebasechat.R
-
 import com.ands.firebasechat.data.GetCurrentTime
 import com.ands.firebasechat.data.models.ChatInfo
 import com.ands.firebasechat.databinding.CorrespondenceItemBinding
 import com.squareup.picasso.Picasso
 
-class ChatsAdapter(private val listener: ClickItem, private val currentUserUid: String): ListAdapter<ChatInfo, ChatsAdapter.ItemHolder>(ItemComparator()) {
+class ChatsAdapter(private val listener: ClickItem, private val currentUserUid: String) : ListAdapter<ChatInfo, ChatsAdapter.ItemHolder>(ItemComparator()) {
 
-    class ItemHolder(private val binding: CorrespondenceItemBinding): RecyclerView.ViewHolder(binding.root) {
+    class ItemHolder(private val binding: CorrespondenceItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(chatInfo: ChatInfo, listener: ClickItem, currentUserUid: String) = with(binding) {
 
@@ -48,7 +45,7 @@ class ChatsAdapter(private val listener: ClickItem, private val currentUserUid: 
         holder.bind(getItem(position), listener, currentUserUid = currentUserUid)
     }
 
-    class ItemComparator() : DiffUtil.ItemCallback<ChatInfo>(){
+    class ItemComparator : DiffUtil.ItemCallback<ChatInfo>() {
         override fun areItemsTheSame(oldItem: ChatInfo, newItem: ChatInfo): Boolean {
             return oldItem == newItem
         }

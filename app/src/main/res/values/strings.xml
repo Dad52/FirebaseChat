@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">FirebaseChat</string>
     <string name="YouText">You: %1$s</string>
+    <string name="errorTime">00:00</string>
 </resources>

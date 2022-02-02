@@ -1,9 +1,9 @@
 package com.ands.firebasechat
 
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ands.firebasechat.activities.ChatsActivity
 import com.ands.firebasechat.data.GetCurrentTime
@@ -18,7 +18,6 @@ import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
-import java.security.MessageDigest
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -26,7 +25,7 @@ import kotlin.collections.ArrayList
 class MainActivity : AppCompatActivity(), SecondViewHolder.LongClickMessages {
 
     private lateinit var binding: ActivityMainBinding
-    lateinit var auth: FirebaseAuth
+    private lateinit var auth: FirebaseAuth
     private lateinit var friendUid: String
     private lateinit var adapter: MessagesAdapter
 

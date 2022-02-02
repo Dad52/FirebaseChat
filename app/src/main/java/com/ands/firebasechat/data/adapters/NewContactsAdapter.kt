@@ -16,7 +16,8 @@ class NewContactsAdapter(private val addNewContactListener: AddNewContactListene
 
         fun bind(contact: Users, addContactListener: AddNewContactListener) = with(binding) {
 
-            contactEmailText.text = contact.email
+//            contactEmailText.text = contact.email
+            contactEmailText.text = "testEmail@gmail.com"
             contactNameText.text = contact.name
 
             Picasso.with(binding.root.context).load(contact.photoUrl).into(contactIcon)

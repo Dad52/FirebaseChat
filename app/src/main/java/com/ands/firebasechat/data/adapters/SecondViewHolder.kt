@@ -2,6 +2,7 @@ package com.ands.firebasechat.data.adapters
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import com.ands.firebasechat.R
 import com.ands.firebasechat.data.GetCurrentTime
 import com.ands.firebasechat.data.models.Messages
 import com.ands.firebasechat.databinding.UserListItemBinding
@@ -16,7 +17,7 @@ sealed class SecondViewHolder(binding: ViewBinding): RecyclerView.ViewHolder(bin
             username.text = messages.user
 
             if (messages.time == null) {
-                messageTimeLeft.text = "00:00"
+                messageTimeLeft.text = binding.root.context.getString(R.string.errorTime)
             } else {
                 messageTimeLeft.text = GetCurrentTime.getCurrentTimeString(messages.time.toLong())
             }
@@ -35,7 +36,7 @@ sealed class SecondViewHolder(binding: ViewBinding): RecyclerView.ViewHolder(bin
             username.text = messages.user
 
             if (messages.time == null) {
-                messageTimeRight.text = "00:00"
+                messageTimeRight.text = binding.root.context.getString(R.string.errorTime)
             } else {
                 messageTimeRight.text = GetCurrentTime.getCurrentTimeString(messages.time.toLong())
             }

@@ -9,10 +9,10 @@ import com.ands.firebasechat.data.models.Messages
 import com.ands.firebasechat.databinding.UserListItemBinding
 import com.ands.firebasechat.databinding.UserListRightItemBinding
 
-class MessagesAdapter(private val currentUserUid: String, private val longClickListener: SecondViewHolder.LongClickMessages): ListAdapter<Messages, SecondViewHolder>(ItemComparator()) {
+class MessagesAdapter(private val currentUserUid: String, private val longClickListener: SecondViewHolder.LongClickMessages) : ListAdapter<Messages, SecondViewHolder>(ItemComparator()) {
 
 
-    class ItemComparator: DiffUtil.ItemCallback<Messages>(){
+    class ItemComparator() : DiffUtil.ItemCallback<Messages>() {
         override fun areItemsTheSame(oldItem: Messages, newItem: Messages): Boolean {
             return oldItem == newItem
         }
@@ -20,7 +20,6 @@ class MessagesAdapter(private val currentUserUid: String, private val longClickL
         override fun areContentsTheSame(oldItem: Messages, newItem: Messages): Boolean {
             return oldItem == newItem
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SecondViewHolder {
@@ -45,16 +44,16 @@ class MessagesAdapter(private val currentUserUid: String, private val longClickL
     }
 
     override fun onBindViewHolder(holder: SecondViewHolder, position: Int) {
-        when(holder) {
+        when (holder) {
             is SecondViewHolder.LeftViewHolder -> holder.bind(getItem(position))
             is SecondViewHolder.RightViewHolder -> holder.bind(getItem(position))
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        when (getItem(position).userUid) {
-            currentUserUid -> return R.layout.user_list_right_item
-            else -> return R.layout.user_list_item
+        return when (getItem(position).userUid) {
+            currentUserUid -> R.layout.user_list_right_item
+            else -> R.layout.user_list_item
         }
 
     }
